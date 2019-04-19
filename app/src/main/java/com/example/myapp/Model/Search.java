@@ -1,6 +1,8 @@
 package com.example.myapp.Model;
 
-public class Search {
+import java.io.Serializable;
+
+public class Search implements Serializable {
     public int account_id;
     public String personaname;
     public String avatarfull;

@@ -1,5 +1,6 @@
 package com.example.myapp.Controller;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
@@ -72,7 +73,10 @@ public class SearchView extends RecyclerView.Adapter<SearchView.NameSearchViewHo
                 }, 500);*/
 
                 // Change activity
-
+                Intent intent = new Intent(SearchActivity.instance, PlayerInfoActivity.class);
+                intent.putExtra("PlayerInfo", dataset.get(i));
+                SearchActivity.instance.startActivity(intent);
+                SearchActivity.instance.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }
         });
         nameSearchViewHolder.nameView.setText(dataset.get(i).personaname);
