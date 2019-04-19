@@ -105,34 +105,40 @@ public class SearchActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                 }
 
-                // Download all avatar before display
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < list.size(); i++) {
-                            Search player = (Search)list.get(i);
-                            try {
-                                InputStream in = new URL(player.avatarfull).openStream();
-                                player.setBitmap(BitmapFactory.decodeStream(in));
-                            } catch (MalformedURLException e) {
-                            } catch (IOException e) {
+                ArrayList<Thread> threads = new ArrayList<>();
+                for (int i = 0; i < list.size(); i++) {
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < list.size(); i++) {
+                                Search player = (Search) list.get(i);
+                                try {
+                                    InputStream in = new URL(player.avatarfull).openStream();
+                                    player.setBitmap(BitmapFactory.decodeStream(in));
+                                } catch (MalformedURLException e) {
+                                } catch (IOException e) {
+                                }
                             }
                         }
+                    });
+                    threads.add(t);
+                    t.start();
+                }
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (searchView.getAdapter() == null) searchView.setAdapter(new SearchView(list));
-                                else ((SearchView) searchView.getAdapter()).updateList(list);
-                                searchView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.layout_fall_down));
-                                searchView.smoothScrollToPosition(0);
-
-                                searchButton.setEnabled(true);
-                                isSearching = false;
-                            }
-                        });
+                for (int i = 0; i < threads.size(); i++){
+                    try{
+                        threads.get(i).join();
                     }
-                }).start();
+                    catch (InterruptedException e){}
+                }
+
+                if (searchView.getAdapter() == null) searchView.setAdapter(new SearchView(list));
+                else ((SearchView) searchView.getAdapter()).updateList(list);
+                searchView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.layout_fall_down));
+                searchView.smoothScrollToPosition(0);
+
+                searchButton.setEnabled(true);
+                isSearching = false;
             }
         }, new Response.ErrorListener() {
             @Override
