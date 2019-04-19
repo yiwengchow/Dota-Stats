@@ -1,5 +1,6 @@
 package com.example.myapp.Controller;
 
+import android.graphics.BitmapFactory;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class SearchActivity extends AppCompatActivity {
@@ -43,7 +48,7 @@ public class SearchActivity extends AppCompatActivity {
         initializeSearch();
     }
 
-    private void initializeInterface(){
+    private void initializeInterface() {
         searchEditText = findViewById(R.id.SearchEditText);
         searchButton = findViewById(R.id.SearchButton);
         searchView = findViewById(R.id.SearchView);
@@ -52,11 +57,11 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setLayoutManager(layoutManager);
     }
 
-    private void initializeSearch(){
+    private void initializeSearch() {
         searchEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER){
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
                     Search();
                     return true;
                 }
@@ -71,68 +76,69 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private void Search(){
+    private void Search() {
         if (isSearching) return;
         searchButton.setEnabled(false);
         isSearching = true;
         DotaAPI.getInstance().getPlayersByName(searchEditText.getText().toString(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                ArrayList list = new ArrayList<Search>();
+                final ArrayList list = new ArrayList<Search>();
 
-                try{
+                try {
                     JSONArray jsonArray = new JSONArray(response);
 
                     for (int i = 0; i < jsonArray.length(); i++) {
-                        Search search = new Search();
+                        final Search search = new Search();
                         JSONObject searchObj = jsonArray.getJSONObject(i);
                         search.account_id = searchObj.getInt("account_id");
                         search.personaname = searchObj.getString("personaname");
                         search.avatarfull = searchObj.getString("avatarfull");
 
-                        try{
+                        try {
                             // Some profiles may not have this
                             search.lastMatchTime = searchObj.getString("last_match_time");
-                        }
-                        catch (JSONException e){}
+                        } catch (JSONException e) {}
 
                         list.add(search);
-
-                                /*DotaAPI.getInstance().getPlayerAsync(search.account_id, new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        try {
-                                            JSONObject jsonObj = new JSONObject(response);
-                                            search.solorank = jsonObj.getString("solo_competitive_rank");
-                                            search.partyrank = jsonObj.getString("competitive_rank");
-
-                                            JSONObject mmrEstimate = jsonObj.getJSONObject("mmr_estimate");
-                                            search.estimateMMR = mmrEstimate.getInt("estimate");
-                                            list.add(search);
-                                        } catch (JSONException e) {
-                                        }
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-
-                                    }
-                                });*/
                     }
+                } catch (JSONException e) {
                 }
-                catch (JSONException e){}
-                if (searchView.getAdapter() == null) searchView.setAdapter(new SearchView(list));
-                else ((SearchView)searchView.getAdapter()).updateList(list);
-                searchView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.layout_fall_down));
-                searchView.smoothScrollToPosition(0);
 
-                searchButton.setEnabled(true);
-                isSearching = false;
-             }
+                // Download all avatar before display
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < list.size(); i++) {
+                            Search player = (Search)list.get(i);
+                            try {
+                                InputStream in = new URL(player.avatarfull).openStream();
+                                player.setBitmap(BitmapFactory.decodeStream(in));
+                            } catch (MalformedURLException e) {
+                            } catch (IOException e) {
+                            }
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (searchView.getAdapter() == null) searchView.setAdapter(new SearchView(list));
+                                else ((SearchView) searchView.getAdapter()).updateList(list);
+                                searchView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.layout_fall_down));
+                                searchView.smoothScrollToPosition(0);
+
+                                searchButton.setEnabled(true);
+                                isSearching = false;
+                            }
+                        });
+                    }
+                }).start();
+            }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                searchButton.setEnabled(true);
+                isSearching = false;
             }
         });
     }

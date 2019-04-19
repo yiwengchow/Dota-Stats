@@ -11,12 +11,13 @@ public class PlayerInfoActivity extends AppCompatActivity {
 
     Search data;
     ImageView avatarImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_info);
 
-        data = (Search)getIntent().getSerializableExtra("PlayerInfo");
+        data = (Search) getIntent().getSerializableExtra("PlayerInfo");
         System.out.println(data.account_id);
 
         avatarImage = findViewById(R.id.avatar_image);
@@ -24,7 +25,7 @@ public class PlayerInfoActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         finish();
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }

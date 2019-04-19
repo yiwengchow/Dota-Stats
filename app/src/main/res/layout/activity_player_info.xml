@@ -10,6 +10,9 @@
         android:id="@+id/avatar_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxWidth="250px"
+        android:maxHeight="250px"
+        android:minWidth="250px"
         tools:layout_editor_absoluteX="3dp"
         tools:layout_editor_absoluteY="3dp"
         tools:srcCompat="@tools:sample/avatars" />
