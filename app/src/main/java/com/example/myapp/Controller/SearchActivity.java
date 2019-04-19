@@ -80,11 +80,11 @@ public class SearchActivity extends AppCompatActivity {
         if (isSearching) return;
         searchButton.setEnabled(false);
         isSearching = true;
+
+        final ArrayList<Search> searchList = new ArrayList<>();
         DotaAPI.getInstance().getPlayersByName(searchEditText.getText().toString(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                final ArrayList list = new ArrayList<Search>();
-
                 try {
                     JSONArray jsonArray = new JSONArray(response);
 
@@ -100,40 +100,13 @@ public class SearchActivity extends AppCompatActivity {
                             search.lastMatchTime = searchObj.getString("last_match_time");
                         } catch (JSONException e) {}
 
-                        list.add(search);
+                        searchList.add(search);
                     }
-                } catch (JSONException e) {
-                }
+                } catch (JSONException e) {}
 
-                ArrayList<Thread> threads = new ArrayList<>();
-                for (int i = 0; i < list.size(); i++) {
-                    Thread t = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (int i = 0; i < list.size(); i++) {
-                                Search player = (Search) list.get(i);
-                                try {
-                                    InputStream in = new URL(player.avatarfull).openStream();
-                                    player.setBitmap(BitmapFactory.decodeStream(in));
-                                } catch (MalformedURLException e) {
-                                } catch (IOException e) {
-                                }
-                            }
-                        }
-                    });
-                    threads.add(t);
-                    t.start();
-                }
+                if (searchView.getAdapter() == null) searchView.setAdapter(new SearchView(searchList));
+                else ((SearchView) searchView.getAdapter()).updateList(searchList);
 
-                for (int i = 0; i < threads.size(); i++){
-                    try{
-                        threads.get(i).join();
-                    }
-                    catch (InterruptedException e){}
-                }
-
-                if (searchView.getAdapter() == null) searchView.setAdapter(new SearchView(list));
-                else ((SearchView) searchView.getAdapter()).updateList(list);
                 searchView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.layout_fall_down));
                 searchView.smoothScrollToPosition(0);
 

@@ -68,7 +68,25 @@ public class SearchView extends RecyclerView.Adapter<SearchView.NameSearchViewHo
         });
         nameSearchViewHolder.nameView.setText(dataset.get(i).personaname);
         nameSearchViewHolder.lastMatchView.setText("Last match: " + dataset.get(i).lastMatchTime);
-        nameSearchViewHolder.imageView.setImageBitmap(dataset.get(i).getBitmap());
+        nameSearchViewHolder.imageView.setImageResource(R.drawable.default_search_avatar);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final Search player = dataset.get(i);
+                try {
+                    InputStream in = new URL(player.avatarfull).openStream();
+                    player.setBitmap(BitmapFactory.decodeStream(in));
+                    SearchActivity.instance.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            nameSearchViewHolder.imageView.setImageBitmap(player.getBitmap());
+                        }
+                    });
+                } catch (MalformedURLException e) {
+                } catch (IOException e) {
+                }
+            }
+        }).start();
     }
 
     @Override
