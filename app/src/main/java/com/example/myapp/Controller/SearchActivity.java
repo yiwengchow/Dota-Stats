@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
 import com.android.volley.Response;
@@ -22,6 +23,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class SearchActivity extends AppCompatActivity {
+
+    volatile Boolean isSearching = false;
 
     TextInputEditText searchEditText;
     Button searchButton;
@@ -47,7 +50,6 @@ public class SearchActivity extends AppCompatActivity {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         searchView.setLayoutManager(layoutManager);
-
     }
 
     private void initializeSearch(){
@@ -70,10 +72,12 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void Search(){
+        if (isSearching) return;
+        searchButton.setEnabled(false);
+        isSearching = true;
         DotaAPI.getInstance().getPlayersByName(searchEditText.getText().toString(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if (searchView.getAdapter() != null)((SearchView)searchView.getAdapter()).deleteAll();
                 ArrayList list = new ArrayList<Search>();
 
                 try{
@@ -117,8 +121,14 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 }
                 catch (JSONException e){}
-                searchView.setAdapter(new SearchView(list));
-            }
+                if (searchView.getAdapter() == null) searchView.setAdapter(new SearchView(list));
+                else ((SearchView)searchView.getAdapter()).updateList(list);
+                searchView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.layout_fall_down));
+                searchView.smoothScrollToPosition(0);
+
+                searchButton.setEnabled(true);
+                isSearching = false;
+             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {

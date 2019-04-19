@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,6 +50,12 @@ public class SearchView extends RecyclerView.Adapter<SearchView.NameSearchViewHo
         notifyItemRangeRemoved(0, size);
     }
 
+    public void updateList(ArrayList<Search> newDataset){
+        dataset.clear();
+        dataset = newDataset;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public NameSearchViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -86,11 +93,11 @@ public class SearchView extends RecyclerView.Adapter<SearchView.NameSearchViewHo
             public void run() {
                 try{
                     InputStream in = new URL(dataset.get(i).avatarfull).openStream();
-                    final Bitmap bimage = BitmapFactory.decodeStream(in);
+                    dataset.get(i).setBitmap(BitmapFactory.decodeStream(in));
                     SearchActivity.instance.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            nameSearchViewHolder.imageView.setImageBitmap(bimage);
+                            nameSearchViewHolder.imageView.setImageBitmap(dataset.get(i).getBitmap());
                         }
                     });
                 }
@@ -98,8 +105,12 @@ public class SearchView extends RecyclerView.Adapter<SearchView.NameSearchViewHo
                 }
                 catch (IOException e){
                 }
+                catch (IndexOutOfBoundsException e){
+                    // dataset is deleted
+                }
             }
         }).start();
+//        nameSearchViewHolder.mainView.startAnimation(AnimationUtils.loadAnimation(SearchActivity.instance, R.anim.slide_from_right));
     }
 
     @Override
