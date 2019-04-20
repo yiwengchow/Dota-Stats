@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -34,6 +35,7 @@ public class SearchActivity extends AppCompatActivity {
     TextInputEditText searchEditText;
     Button searchButton;
     RecyclerView searchView;
+    ProgressBar searchProgress;
 
     public static SearchActivity instance;
 
@@ -52,6 +54,7 @@ public class SearchActivity extends AppCompatActivity {
         searchEditText = findViewById(R.id.SearchEditText);
         searchButton = findViewById(R.id.SearchButton);
         searchView = findViewById(R.id.SearchView);
+        searchProgress = findViewById(R.id.SearchProgress);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         searchView.setLayoutManager(layoutManager);
@@ -76,10 +79,15 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
+    private void setSearchProgress(boolean flag){
+        searchProgress.setVisibility(flag ? View.VISIBLE : View.INVISIBLE);
+        searchButton.setVisibility(flag ? View.INVISIBLE : View.VISIBLE);
+        isSearching = flag;
+    }
+
     private void Search() {
         if (isSearching) return;
-        searchButton.setEnabled(false);
-        isSearching = true;
+        setSearchProgress(true);
 
         final ArrayList<Search> searchList = new ArrayList<>();
         DotaAPI.getInstance().getPlayersByName(searchEditText.getText().toString(), new Response.Listener<String>() {
@@ -110,14 +118,12 @@ public class SearchActivity extends AppCompatActivity {
                 searchView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.layout_fall_down));
                 searchView.smoothScrollToPosition(0);
 
-                searchButton.setEnabled(true);
-                isSearching = false;
+                setSearchProgress(false);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                searchButton.setEnabled(true);
-                isSearching = false;
+                setSearchProgress(false);
             }
         });
     }
