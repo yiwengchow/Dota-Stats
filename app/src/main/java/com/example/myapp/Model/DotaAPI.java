@@ -19,15 +19,18 @@ public class DotaAPI {
         requestQueue = Volley.newRequestQueue(SearchActivity.instance);
     }
 
-    public StringRequest getPlayerAsync(int id, Response.Listener<String> onSuccess, Response.ErrorListener onFailure){
+    public void getPlayerAsync(int id, Response.Listener<String> onSuccess, Response.ErrorListener onFailure){
         StringRequest stringReq = new StringRequest(Request.Method.GET, "https://api.opendota.com/api/players/" + id, onSuccess, onFailure);
         requestQueue.add(stringReq);
-        return stringReq;
     }
 
-    public StringRequest getPlayersByName(String name, Response.Listener<String> onSuccess, Response.ErrorListener onFailure){
+    public void getPlayersByName(String name, Response.Listener<String> onSuccess, Response.ErrorListener onFailure){
         StringRequest stringReq = new StringRequest(Request.Method.GET, "https://api.opendota.com/api/Search?q=" + name, onSuccess, onFailure);
         requestQueue.add(stringReq);
-        return stringReq;
+    }
+
+    public void getPlayerRecord(int id, Response.Listener<String> onSuccess, Response.ErrorListener onFailure){
+        StringRequest stringReq = new StringRequest(Request.Method.GET, String.format("https://api.opendota.com/api/players/%s/wl", id), onSuccess, onFailure);
+        requestQueue.add(stringReq);
     }
 }

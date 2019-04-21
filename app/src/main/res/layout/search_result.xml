@@ -9,7 +9,8 @@
         android:id="@+id/SearchResultImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginBottom="8dp"
         android:layout_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,5 +40,13 @@
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/SearchResultImage"
         app:layout_constraintTop_toBottomOf="@+id/SearchNameText" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/SearchResultImage" />
 
 </android.support.constraint.ConstraintLayout>
