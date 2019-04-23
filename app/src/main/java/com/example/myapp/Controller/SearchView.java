@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.myapp.Model.Search;
+import com.example.myapp.Model.Player;
 import com.example.myapp.R;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class SearchView extends RecyclerView.Adapter<SearchView.NameSearchViewHolder> {
 
-    private ArrayList<Search> dataset;
+    private ArrayList<Player> dataset;
 
     public static class NameSearchViewHolder extends RecyclerView.ViewHolder {
         public View mainView;
@@ -38,11 +38,11 @@ public class SearchView extends RecyclerView.Adapter<SearchView.NameSearchViewHo
         }
     }
 
-    public SearchView(ArrayList<Search> dataset) {
+    public SearchView(ArrayList<Player> dataset) {
         this.dataset = dataset;
     }
 
-    public void updateList(ArrayList<Search> newDataset) {
+    public void updateList(ArrayList<Player> newDataset) {
         dataset.clear();
         dataset = newDataset;
         notifyDataSetChanged();
@@ -72,7 +72,7 @@ public class SearchView extends RecyclerView.Adapter<SearchView.NameSearchViewHo
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final Search player = dataset.get(i);
+                final Player player = dataset.get(i);
                 try {
                     InputStream in = new URL(player.avatarfull).openStream();
                     player.setBitmap(BitmapFactory.decodeStream(in));

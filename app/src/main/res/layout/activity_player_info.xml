@@ -123,13 +123,28 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/rank_herald_1"
-            tools:srcCompat="@drawable/rank_herald_1" />
+            app:srcCompat="@drawable/rank_0"
+            tools:srcCompat="@drawable/rank_0" />
+
+        <TextView
+            android:id="@+id/leaderboard_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:textColor="@android:color/background_light"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@+id/medal_image"
+            app:layout_constraintEnd_toEndOf="@+id/medal_image"
+            app:layout_constraintStart_toStartOf="@+id/medal_image" />
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/mmr_label_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:foregroundGravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="@+id/medal_image"
             app:layout_constraintEnd_toEndOf="parent"
@@ -149,7 +164,7 @@
                 android:id="@+id/estimate_mmr_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 android:text="Estimate:"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -159,7 +174,7 @@
                 android:id="@+id/party_mmr_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 android:text="Party:"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"

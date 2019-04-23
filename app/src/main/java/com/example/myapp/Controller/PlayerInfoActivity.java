@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.myapp.Model.DotaAPI;
-import com.example.myapp.Model.Search;
+import com.example.myapp.Model.Player;
 import com.example.myapp.R;
 
 import org.json.JSONException;
@@ -19,13 +19,14 @@ import org.json.JSONObject;
 
 public class PlayerInfoActivity extends AppCompatActivity {
 
-    Search data;
+    Player data;
 
     ConstraintLayout winLoseLayout;
     ConstraintLayout mmrLayout;
     ProgressBar loadingProgressBar;
     ImageView avatarImage;
     ImageView medalImage;
+    TextView leaderboardRank;
     TextView playerName;
     TextView wins;
     TextView loses;
@@ -42,11 +43,12 @@ public class PlayerInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_info);
 
-        data = (Search) getIntent().getSerializableExtra("PlayerInfo");
+        data = (Player) getIntent().getSerializableExtra("PlayerInfo");
         winLoseLayout = findViewById(R.id.win_lose_layout);
         mmrLayout = findViewById(R.id.mmr_layout);
         loadingProgressBar = findViewById(R.id.loading_progress_bar);
         avatarImage = findViewById(R.id.avatar_image);
+        leaderboardRank = findViewById(R.id.leaderboard_rank);
         medalImage = findViewById(R.id.medal_image);
         playerName = findViewById(R.id.player_name);
         wins = findViewById(R.id.record_wins);
@@ -55,7 +57,11 @@ public class PlayerInfoActivity extends AppCompatActivity {
         soloMMR = findViewById(R.id.solo_mmr);
         partyMMR = findViewById(R.id.party_mmr);
         estimatedMMR = findViewById(R.id.estimate_mmr);
+    }
 
+    @Override
+    protected void onStart(){
+        super.onStart();
         initializeData();
     }
 
@@ -112,7 +118,6 @@ public class PlayerInfoActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error)
             {
-                setWinRateLoaded(true);
             }
         });
 
@@ -123,14 +128,50 @@ public class PlayerInfoActivity extends AppCompatActivity {
                     JSONObject obj = new JSONObject(response);
                     JSONObject estMMRObj = obj.getJSONObject("mmr_estimate");
 
-                    String mmr = obj.getString("solo_competitive_rank");
-                    soloMMR.setText(!mmr.equals("null") ? mmr : "");
+                    try{
+                        String mmr = obj.getString("solo_competitive_rank");
+                        soloMMR.setText(!mmr.equals("null") ? mmr : "");
+                    }
+                    catch (JSONException ex){}
 
-                    mmr = obj.getString("competitive_rank");
-                    partyMMR.setText(!mmr.equals("null") ? mmr : "");
+                    try{
+                        String mmr = obj.getString("competitive_rank");
+                        partyMMR.setText(!mmr.equals("null") ? mmr : "");
+                    }
+                    catch (JSONException ex){}
 
-                    mmr = String.valueOf(estMMRObj.getInt("estimate"));
-                    estimatedMMR.setText(mmr);
+                    try{
+                        String mmr = String.valueOf(estMMRObj.getInt("estimate"));
+                        estimatedMMR.setText(mmr);
+                    }
+                    catch (JSONException ex){}
+
+                    try {
+                        int rankTier = obj.getInt("rank_tier");
+                        int rankRes = 0;
+
+                        if (rankTier != 80){
+                            rankRes = getResources().getIdentifier("drawable/rank_" + rankTier, null, getPackageName());
+                        }
+                        else{
+                            try{
+                                int ranking = obj.getInt("leaderboard_rank");
+
+                                if (ranking <= 100)
+                                    rankRes = getResources().getIdentifier("drawable/rank_" + rankTier + "_top_100", null, getPackageName());
+                                else if (ranking <= 10)
+                                    rankRes = getResources().getIdentifier("drawable/rank_" + rankTier + "_top_10", null, getPackageName());
+                                else{
+                                    rankRes = getResources().getIdentifier("drawable/rank_" + rankTier + "_top_1000", null, getPackageName());
+                                }
+
+                                leaderboardRank.setText(String.valueOf(ranking));
+                            }
+                            catch(JSONException e){}
+                        }
+                        medalImage.setImageResource(rankRes);
+                    }
+                    catch (JSONException e){}
                 }
                 catch(JSONException e){}
                 setMMRLoaded(true);
@@ -139,7 +180,6 @@ public class PlayerInfoActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error)
             {
-                setMMRLoaded(false);
             }
         });
     }
