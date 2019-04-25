@@ -16,8 +16,10 @@ import android.widget.ProgressBar;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.myapp.Model.DotaAPI;
-import com.example.myapp.Model.Player;
+import com.example.myapp.Model.Hero;
+import com.example.myapp.Model.PlayerSearch;
 import com.example.myapp.R;
+import com.example.myapp.Repository;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,8 +49,35 @@ public class SearchActivity extends AppCompatActivity {
         instance = this;
         /*MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");*/
 
+        initializeRepo();
         initializeInterface();
         initializeSearch();
+    }
+
+    private void initializeRepo(){
+        DotaAPI.getInstance().getHeroes(new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try{
+                    JSONArray jsonHeroList = new JSONArray(response);
+                    for (int i = 0; i < jsonHeroList.length(); i++){
+                        JSONObject jsonHeroObj = jsonHeroList.getJSONObject(i);
+
+                        Hero hero = new Hero();
+                        hero.id = jsonHeroObj.getInt("id");
+                        hero.name = jsonHeroObj.getString("name");
+                        hero.displayName = jsonHeroObj.getString("localized_name");
+                        Repository.getInstance().heroList.add(hero);
+                    }
+                }
+                catch (JSONException e){}
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
     }
 
     private void initializeInterface() {
@@ -92,7 +121,7 @@ public class SearchActivity extends AppCompatActivity {
 
         final String target = searchEditText.getText().toString();
 
-        // try to get if player exists first
+        // try to get if playerSearch exists first
         try{
             DotaAPI.getInstance().getPlayerAsync(Integer.parseInt(target), new Response.Listener<String>() {
                 @Override
@@ -102,22 +131,22 @@ public class SearchActivity extends AppCompatActivity {
                         JSONObject profileObj = playerObj.getJSONObject("profile"); //Exception will prompt if does not exist
 
                         // Go next page
-                        final Player player = new Player();
-                        player.account_id = profileObj.getInt("account_id");
-                        player.personaname = profileObj.getString("personaname");
-                        player.avatarfull = profileObj.getString("avatarfull");
+                        final PlayerSearch playerSearch = new PlayerSearch();
+                        playerSearch.account_id = profileObj.getInt("account_id");
+                        playerSearch.personaname = profileObj.getString("personaname");
+                        playerSearch.avatarfull = profileObj.getString("avatarfull");
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 try {
-                                    InputStream in = new URL(player.avatarfull).openStream();
-                                    player.setBitmap(BitmapFactory.decodeStream(in));
+                                    InputStream in = new URL(playerSearch.avatarfull).openStream();
+                                    playerSearch.setBitmap(BitmapFactory.decodeStream(in));
 
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             Intent intent = new Intent(SearchActivity.instance, PlayerInfoActivity.class);
-                                            intent.putExtra("PlayerInfo", player);
+                                            intent.putExtra("PlayerInfo", playerSearch);
                                             SearchActivity.instance.startActivity(intent);
                                             SearchActivity.instance.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 
@@ -147,7 +176,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void displayPlayers(String target){
-        final ArrayList<Player> playerList = new ArrayList<>();
+        final ArrayList<PlayerSearch> playerSearchList = new ArrayList<>();
         DotaAPI.getInstance().getPlayersByName(target, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -155,23 +184,23 @@ public class SearchActivity extends AppCompatActivity {
                     JSONArray jsonArray = new JSONArray(response);
 
                     for (int i = 0; i < jsonArray.length(); i++) {
-                        final Player player = new Player();
+                        final PlayerSearch playerSearch = new PlayerSearch();
                         JSONObject playerObj = jsonArray.getJSONObject(i);
-                        player.account_id = playerObj.getInt("account_id");
-                        player.personaname = playerObj.getString("personaname");
-                        player.avatarfull = playerObj.getString("avatarfull");
+                        playerSearch.account_id = playerObj.getInt("account_id");
+                        playerSearch.personaname = playerObj.getString("personaname");
+                        playerSearch.avatarfull = playerObj.getString("avatarfull");
 
                         try {
                             // Some profiles may not have this
-                            player.lastMatchTime = playerObj.getString("last_match_time");
+                            playerSearch.lastMatchTime = playerObj.getString("last_match_time");
                         } catch (JSONException e) {}
 
-                        playerList.add(player);
+                        playerSearchList.add(playerSearch);
                     }
                 } catch (JSONException e) {}
 
-                if (searchView.getAdapter() == null) searchView.setAdapter(new SearchView(playerList));
-                else ((SearchView) searchView.getAdapter()).updateList(playerList);
+                if (searchView.getAdapter() == null) searchView.setAdapter(new PlayerSearchView(playerSearchList));
+                else ((PlayerSearchView) searchView.getAdapter()).updateList(playerSearchList);
 
                 searchView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.layout_fall_down));
                 searchView.smoothScrollToPosition(0);

@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 import java.io.Serializable;
 
-public class Player implements Serializable{
+public class PlayerSearch implements Serializable{
     public int account_id;
     public String personaname;
     public String avatarfull;

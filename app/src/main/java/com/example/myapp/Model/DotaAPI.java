@@ -33,4 +33,14 @@ public class DotaAPI {
         StringRequest stringReq = new StringRequest(Request.Method.GET, String.format("https://api.opendota.com/api/players/%s/wl", id), onSuccess, onFailure);
         requestQueue.add(stringReq);
     }
+
+    public void getPlayerMatches(int id, Response.Listener<String> onSuccess, Response.ErrorListener onFailure){
+        StringRequest stringReq = new StringRequest(Request.Method.GET, String.format("https://api.opendota.com/api/players/%s/matches", id), onSuccess, onFailure);
+        requestQueue.add(stringReq);
+    }
+
+    public void getHeroes(Response.Listener<String> onSuccess, Response.ErrorListener onFailure){
+        StringRequest stringReq = new StringRequest(Request.Method.GET, "https://api.opendota.com/api/heroes", onSuccess, onFailure);
+        requestQueue.add(stringReq);
+    }
 }
