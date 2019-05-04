@@ -1,5 +1,5 @@
 package com.example.myapp.Controller;
-import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,31 +9,39 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myapp.Model.Hero;
-import com.example.myapp.Model.MatchSearch;
-import com.example.myapp.Model.PlayerSearch;
+import com.example.myapp.Model.Match;
 import com.example.myapp.R;
 import com.example.myapp.Repository;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class MatchSearchView extends RecyclerView.Adapter<MatchSearchView.MatchSearchViewHolder> {
 
-    private ArrayList<MatchSearch> dataset;
+    private ArrayList<Match> dataset;
 
-    public MatchSearchView(ArrayList<MatchSearch> dataset) {
+    public MatchSearchView(ArrayList<Match> dataset) {
         this.dataset = dataset;
     }
 
     public static class MatchSearchViewHolder extends RecyclerView.ViewHolder {
         public ImageView heroImage;
         public TextView heroNameText;
+        public TextView kdaText;
+        public TextView timePlayedText;
+        public TextView typeText;
+        public TextView resultText;
+        public TextView durationText;
 
         public MatchSearchViewHolder(View view) {
             super(view);
             heroImage = view.findViewById(R.id.hero_image);
             heroNameText = view.findViewById(R.id.hero_name);
+            kdaText = view.findViewById(R.id.kda_text);
+            timePlayedText = view.findViewById(R.id.timeplayed_text);
+            typeText = view.findViewById(R.id.gametype_text);
+            resultText = view.findViewById(R.id.result_text);
+            durationText = view.findViewById(R.id.duration_text);
         }
     }
 
@@ -46,13 +54,25 @@ public class MatchSearchView extends RecyclerView.Adapter<MatchSearchView.MatchS
 
     @Override
     public void onBindViewHolder(@NonNull MatchSearchView.MatchSearchViewHolder matchSearchViewHolder, int i) {
+        Match match = dataset.get(i);
         for(Hero hero : Repository.getInstance().heroList){
-            if (hero.id == dataset.get(i).heroId){
+            if (hero.id == match.heroId){
                 matchSearchViewHolder.heroImage.setImageResource(getHeroImageRes(hero));
                 matchSearchViewHolder.heroNameText.setText(hero.displayName);
+//                matchSearchViewHolder.kdaText.setText();
                 break;
             }
         }
+
+        matchSearchViewHolder.kdaText.setText(String.format("%d/%d/%d", match.kills, match.deaths, match.assists));
+        matchSearchViewHolder.resultText.setText(match.gameWon ? "Won" : "Lost");
+        matchSearchViewHolder.resultText.setTextColor(match.gameWon ? Color.GREEN : Color.RED);
+
+        int seconds = match.duration;
+        long hours = TimeUnit.SECONDS.toHours(seconds);
+        long minute = TimeUnit.SECONDS.toMinutes(seconds) - (TimeUnit.SECONDS.toHours(seconds)* 60);
+        long second = TimeUnit.SECONDS.toSeconds(seconds) - (TimeUnit.SECONDS.toMinutes(seconds) *60);
+        matchSearchViewHolder.durationText.setText(String.format("%s%02d:%02d", hours != 0 ? hours + ":" : "", minute, second));
     }
 
     @Override

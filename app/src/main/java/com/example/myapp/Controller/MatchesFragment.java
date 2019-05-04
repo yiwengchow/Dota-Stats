@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.myapp.Model.DotaAPI;
-import com.example.myapp.Model.MatchSearch;
+import com.example.myapp.Model.Match;
 import com.example.myapp.Model.PlayerSearch;
 import com.example.myapp.R;
 
@@ -52,18 +52,49 @@ public class MatchesFragment extends Fragment {
             public void onResponse(String response) {
                 try{
                     JSONArray jsonMatchList = new JSONArray(response);
-                    ArrayList<MatchSearch> matchList = new ArrayList<>();
+                    ArrayList<Match> matchList = new ArrayList<>();
 
                     for (int i = 0; i < jsonMatchList.length(); i++){
                         JSONObject jsonMatchObj = jsonMatchList.getJSONObject(i);
-                        MatchSearch match = new MatchSearch();
+                        Match match = new Match();
+                        match.matchId = jsonMatchObj.getInt("match_id");
+                        match.playerSlot = jsonMatchObj.getInt("player_slot");
+
+                        boolean radiantWon = jsonMatchObj.getBoolean("radiant_win");
+                        if (match.playerSlot >= 0 && match.playerSlot <= 127) match.gameWon = radiantWon;
+                        else match.gameWon = !radiantWon;
+
+                        match.duration = jsonMatchObj.getInt("duration");
+                        match.gameMode = jsonMatchObj.getInt("game_mode");
+                        match.lobbyType = jsonMatchObj.getInt("lobby_type");
                         match.heroId = jsonMatchObj.getInt("hero_id");
+                        match.startTime = jsonMatchObj.getInt("start_time");
+                        match.kills = jsonMatchObj.getInt("kills");
+                        match.deaths = jsonMatchObj.getInt("deaths");
+                        match.assists = jsonMatchObj.getInt("assists");
+
+                        try{
+                            match.version = jsonMatchObj.getInt("version");
+                        }catch(JSONException e){}
+
+                        try{
+                            match.skillBracket = jsonMatchObj.getInt("skill");
+                        }catch(JSONException e){}
+
+                        try{
+                            match.partySize = jsonMatchObj.getInt("party_size");
+                        }catch(JSONException e){}
+
+
                         matchList.add(match);
                     }
 
                     matchView.setAdapter(new MatchSearchView(matchList));
                 }
-                catch (JSONException e){}
+                catch (JSONException e)
+                {
+
+                }
             }
         }, new Response.ErrorListener() {
             @Override
