@@ -12,6 +12,11 @@ import com.example.myapp.Model.Hero;
 import com.example.myapp.Model.Match;
 import com.example.myapp.R;
 import com.example.myapp.Repository;
+import com.example.myapp.Utility;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -28,8 +33,9 @@ public class MatchSearchView extends RecyclerView.Adapter<MatchSearchView.MatchS
         public ImageView heroImage;
         public TextView heroNameText;
         public TextView kdaText;
-        public TextView timePlayedText;
-        public TextView typeText;
+        public TextView startTimeText;
+        public TextView lobbyTypeText;
+        public TextView gameTypeText;
         public TextView resultText;
         public TextView durationText;
 
@@ -38,8 +44,9 @@ public class MatchSearchView extends RecyclerView.Adapter<MatchSearchView.MatchS
             heroImage = view.findViewById(R.id.hero_image);
             heroNameText = view.findViewById(R.id.hero_name);
             kdaText = view.findViewById(R.id.kda_text);
-            timePlayedText = view.findViewById(R.id.timeplayed_text);
-            typeText = view.findViewById(R.id.gametype_text);
+            startTimeText = view.findViewById(R.id.starttime_text);
+            lobbyTypeText = view.findViewById(R.id.lobbytype_text);
+            gameTypeText = view.findViewById(R.id.gametype_text);
             resultText = view.findViewById(R.id.result_text);
             durationText = view.findViewById(R.id.duration_text);
         }
@@ -65,14 +72,46 @@ public class MatchSearchView extends RecyclerView.Adapter<MatchSearchView.MatchS
         }
 
         matchSearchViewHolder.kdaText.setText(String.format("%d/%d/%d", match.kills, match.deaths, match.assists));
-        matchSearchViewHolder.resultText.setText(match.gameWon ? "Won" : "Lost");
+        matchSearchViewHolder.resultText.setText(match.gameWon ? "Game Won" : "Game Lost");
         matchSearchViewHolder.resultText.setTextColor(match.gameWon ? Color.GREEN : Color.RED);
+
+        long currentTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+        long gameTime = match.startTime;
+        long timeDiff = currentTime - gameTime;
+
+        // less than a hour, display as minutes
+        if (timeDiff < TimeUnit.HOURS.toSeconds(1)){
+            long minutes =  TimeUnit.SECONDS.toMinutes(timeDiff);
+            matchSearchViewHolder.startTimeText.setText(String.format("%d %s ago", minutes, minutes <= 1 ? "minute" : "minutes"));
+        }
+        // if less than a day, display as hours
+        else if (timeDiff < TimeUnit.DAYS.toSeconds(1)){
+            long hours = TimeUnit.SECONDS.toHours(timeDiff);
+            matchSearchViewHolder.startTimeText.setText(String.format("%d %s ago", hours, hours <= 1 ? "hour" : "hours"));
+        }
+        // if less than a month (28 days), display as days
+        else if (timeDiff < TimeUnit.DAYS.toSeconds(28)){
+            long days = TimeUnit.SECONDS.toDays(timeDiff);
+            matchSearchViewHolder.startTimeText.setText(String.format("%d %s ago", days,  days <= 1 ? "day" : "days"));
+        }
+        // if less than a year, display as months
+        else if (timeDiff < TimeUnit.DAYS.toSeconds(365)){
+            long months = TimeUnit.SECONDS.toDays(timeDiff) / 28;
+            matchSearchViewHolder.startTimeText.setText(String.format("%d %s ago", months, months <= 1 ? "month" : "months"));
+        }
+        else {
+            long years = TimeUnit.SECONDS.toDays(timeDiff) / 365;
+            matchSearchViewHolder.startTimeText.setText(String.format("%d %s ago", years, years <= 1 ? "year" : "years"));
+        }
 
         int seconds = match.duration;
         long hours = TimeUnit.SECONDS.toHours(seconds);
         long minute = TimeUnit.SECONDS.toMinutes(seconds) - (TimeUnit.SECONDS.toHours(seconds)* 60);
         long second = TimeUnit.SECONDS.toSeconds(seconds) - (TimeUnit.SECONDS.toMinutes(seconds) *60);
         matchSearchViewHolder.durationText.setText(String.format("%s%02d:%02d", hours != 0 ? hours + ":" : "", minute, second));
+
+        matchSearchViewHolder.lobbyTypeText.setText(Utility.getInstance().getLobbyTypeById(match.lobbyType));
+        matchSearchViewHolder.gameTypeText.setText(Utility.getInstance().getGameModeById(match.gameMode));
     }
 
     @Override
