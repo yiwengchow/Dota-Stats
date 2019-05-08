@@ -1,9 +1,12 @@
 package com.example.myapp.Controller;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -21,6 +24,8 @@ import java.util.ArrayList;
 
 public class PlayerInfoActivity extends AppCompatActivity {
 
+    ConstraintLayout loadingLayout;
+
     Player player;
     ViewPager viewPager;
     TabLayout tabLayout;
@@ -35,6 +40,8 @@ public class PlayerInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_info);
+
+        loadingLayout = findViewById(R.id.loading_player_layout);
 
         player = (Player) getIntent().getSerializableExtra("PlayerInfo");
         viewPager = findViewById(R.id.main_view_pager);
@@ -64,10 +71,12 @@ public class PlayerInfoActivity extends AppCompatActivity {
                     } catch (InterruptedException e) {}
                 }
 
+                final ViewPagerAdapter pageAdapter = setupPage();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        setupViewPager(viewPager);
+                        loadingLayout.setVisibility(View.GONE);
+                        viewPager.setAdapter(pageAdapter);
                         tabLayout.setupWithViewPager(viewPager);
                     }
                 });
@@ -86,7 +95,7 @@ public class PlayerInfoActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    private ViewPagerAdapter setupPage() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         // Create profile fragment
@@ -110,7 +119,7 @@ public class PlayerInfoActivity extends AppCompatActivity {
         friendsFragment.setArguments(friendsBundle);
         adapter.addFragment(friendsFragment, "Friends");
 
-        viewPager.setAdapter(adapter);
+        return adapter;
     }
 
     private void loadProfile(){
