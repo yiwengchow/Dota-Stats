@@ -1,6 +1,7 @@
 package com.example.myapp.Controller;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.myapp.Model.DotaAPI;
+import com.example.myapp.Model.Friend;
 import com.example.myapp.Model.Match;
 import com.example.myapp.Model.Player;
 import com.example.myapp.R;
@@ -23,12 +25,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MatchesFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class FriendsFragment extends Fragment {
+    Player player;
+    RecyclerView friendsView;
 
-    RecyclerView matchView;
-    ArrayList<Match> matchList;
-
-    public MatchesFragment() {
+    public FriendsFragment() {
         // Required empty public constructor
     }
 
@@ -36,16 +40,21 @@ public class MatchesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_matches, container, false);
+        View view = inflater.inflate(R.layout.fragment_friends, container, false);
+        player = (Player) getArguments().getSerializable("Player");
+        ArrayList<Friend> friendsList = (ArrayList<Friend>) getArguments().getSerializable("Friends");
+
+        friendsView = view.findViewById(R.id.friends_recycler_view);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        friendsView.setLayoutManager(layoutManager);
+        friendsView.setAdapter(new FriendsView(friendsList));
+
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        matchList = (ArrayList<Match>) getArguments().getSerializable("Matches");
 
-        matchView = view.findViewById(R.id.matches_recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        matchView.setLayoutManager(layoutManager);
-        matchView.setAdapter(new MatchSearchView(matchList));
     }
+
 }

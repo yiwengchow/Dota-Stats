@@ -1,1 +1,1 @@
-- After searching, if playerSearch is selected before the image finish loading/downloading, the image will not appear in the playerSearch's info page
+- After searching, if player is selected before the image finish loading/downloading, the image will not appear in the player's info page

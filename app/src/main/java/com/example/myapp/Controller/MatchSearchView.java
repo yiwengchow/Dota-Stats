@@ -31,23 +31,25 @@ public class MatchSearchView extends RecyclerView.Adapter<MatchSearchView.MatchS
 
     public static class MatchSearchViewHolder extends RecyclerView.ViewHolder {
         public ImageView heroImage;
-        public TextView heroNameText;
+        //public TextView heroNameText;
         public TextView kdaText;
         public TextView startTimeText;
         public TextView lobbyTypeText;
         public TextView gameTypeText;
         public TextView resultText;
+        public TextView skillText;
         public TextView durationText;
 
         public MatchSearchViewHolder(View view) {
             super(view);
             heroImage = view.findViewById(R.id.hero_image);
-            heroNameText = view.findViewById(R.id.hero_name);
+            //heroNameText = view.findViewById(R.id.hero_name);
             kdaText = view.findViewById(R.id.kda_text);
             startTimeText = view.findViewById(R.id.starttime_text);
             lobbyTypeText = view.findViewById(R.id.lobbytype_text);
             gameTypeText = view.findViewById(R.id.gametype_text);
             resultText = view.findViewById(R.id.result_text);
+            skillText = view.findViewById(R.id.skill_text);
             durationText = view.findViewById(R.id.duration_text);
         }
     }
@@ -65,7 +67,7 @@ public class MatchSearchView extends RecyclerView.Adapter<MatchSearchView.MatchS
         for(Hero hero : Repository.getInstance().heroList){
             if (hero.id == match.heroId){
                 matchSearchViewHolder.heroImage.setImageResource(getHeroImageRes(hero));
-                matchSearchViewHolder.heroNameText.setText(hero.displayName);
+                //matchSearchViewHolder.heroNameText.setText(hero.displayName);
 //                matchSearchViewHolder.kdaText.setText();
                 break;
             }
@@ -110,6 +112,7 @@ public class MatchSearchView extends RecyclerView.Adapter<MatchSearchView.MatchS
         long second = TimeUnit.SECONDS.toSeconds(seconds) - (TimeUnit.SECONDS.toMinutes(seconds) *60);
         matchSearchViewHolder.durationText.setText(String.format("%s%02d:%02d", hours != 0 ? hours + ":" : "", minute, second));
 
+        matchSearchViewHolder.skillText.setText(match.getSkillBracket());
         matchSearchViewHolder.lobbyTypeText.setText(Utility.getInstance().getLobbyTypeById(match.lobbyType));
         matchSearchViewHolder.gameTypeText.setText(Utility.getInstance().getGameModeById(match.gameMode));
     }

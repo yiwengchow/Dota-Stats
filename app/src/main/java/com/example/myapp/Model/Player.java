@@ -4,11 +4,18 @@ import android.graphics.Bitmap;
 
 import java.io.Serializable;
 
-public class PlayerSearch implements Serializable{
+public class Player implements Serializable{
     public int account_id;
-    public String personaname;
-    public String avatarfull;
+    public String name;
+    public String avatarPath;
     public String lastMatchTime = "None";
+    public int wins;
+    public int loses;
+    public String soloMMR;
+    public String partyMMR;
+    public int estimateMMR;
+    public int rank;
+    public int leaderboard;
 
     private int [] pixels;
     private int width , height;

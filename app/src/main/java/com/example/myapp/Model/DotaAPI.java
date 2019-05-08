@@ -43,4 +43,9 @@ public class DotaAPI {
         StringRequest stringReq = new StringRequest(Request.Method.GET, "https://api.opendota.com/api/heroes", onSuccess, onFailure);
         requestQueue.add(stringReq);
     }
+
+    public void getPlayerFriends(int id, Response.Listener<String> onSuccess, Response.ErrorListener onFailure){
+        StringRequest stringReq = new StringRequest(Request.Method.GET, String.format("https://api.opendota.com/api/players/%s/peers", id), onSuccess, onFailure);
+        requestQueue.add(stringReq);
+    }
 }

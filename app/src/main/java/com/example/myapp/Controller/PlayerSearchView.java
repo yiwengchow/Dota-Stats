@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.myapp.Model.PlayerSearch;
+import com.example.myapp.Model.Player;
 import com.example.myapp.R;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class PlayerSearchView extends RecyclerView.Adapter<PlayerSearchView.PlayerSearchViewHolder> {
 
-    private ArrayList<PlayerSearch> dataset;
+    private ArrayList<Player> dataset;
 
     public static class PlayerSearchViewHolder extends RecyclerView.ViewHolder {
         public View mainView;
@@ -38,11 +38,11 @@ public class PlayerSearchView extends RecyclerView.Adapter<PlayerSearchView.Play
         }
     }
 
-    public PlayerSearchView(ArrayList<PlayerSearch> dataset) {
+    public PlayerSearchView(ArrayList<Player> dataset) {
         this.dataset = dataset;
     }
 
-    public void updateList(ArrayList<PlayerSearch> newDataset) {
+    public void updateList(ArrayList<Player> newDataset) {
         dataset.clear();
         dataset = newDataset;
         notifyDataSetChanged();
@@ -66,20 +66,20 @@ public class PlayerSearchView extends RecyclerView.Adapter<PlayerSearchView.Play
                 SearchActivity.instance.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }
         });
-        playerSearchViewHolder.nameView.setText(dataset.get(i).personaname);
+        playerSearchViewHolder.nameView.setText(dataset.get(i).name);
         playerSearchViewHolder.lastMatchView.setText("Last match: " + dataset.get(i).lastMatchTime);
         playerSearchViewHolder.imageView.setImageResource(R.drawable.default_search_avatar);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final PlayerSearch playerSearch = dataset.get(i);
+                final Player player = dataset.get(i);
                 try {
-                    InputStream in = new URL(playerSearch.avatarfull).openStream();
-                    playerSearch.setBitmap(BitmapFactory.decodeStream(in));
+                    InputStream in = new URL(player.avatarPath).openStream();
+                    player.setBitmap(BitmapFactory.decodeStream(in));
                     SearchActivity.instance.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            playerSearchViewHolder.imageView.setImageBitmap(playerSearch.getBitmap());
+                            playerSearchViewHolder.imageView.setImageBitmap(player.getBitmap());
                         }
                     });
                 } catch (MalformedURLException e) {

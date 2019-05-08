@@ -13,6 +13,20 @@ public class Match {
     public int kills;
     public int deaths;
     public int assists;
-    public int skillBracket;
     public int partySize;
+
+    private int skillBracket;
+    public void setSkillBracket(int value){
+        skillBracket = value;
+    }
+    public String getSkillBracket(){
+        if (skillBracket == 0)
+            return "Unknown Skill";
+        else if (skillBracket == 1)
+            return "Normal Skill";
+        else if (skillBracket == 2)
+            return "High Skill";
+        else
+            return "Very High Skill";
+    }
 }
