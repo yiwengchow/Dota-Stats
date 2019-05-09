@@ -9,6 +9,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class Utility {
     private static final Utility ourInstance = new Utility();
@@ -33,6 +37,13 @@ public class Utility {
             ex.printStackTrace();
         }
         return json;
+    }
+
+    public String convertEpochToDatetime(int seconds){
+        Date date = new Date(seconds * 1000L);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy  HH:mm", Locale.ENGLISH);
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return sdf.format(date);
     }
 
     public String getGameModeById(int id){

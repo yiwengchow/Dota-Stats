@@ -51,10 +51,4 @@ public class FriendsFragment extends Fragment {
 
         return view;
     }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
-    }
-
 }

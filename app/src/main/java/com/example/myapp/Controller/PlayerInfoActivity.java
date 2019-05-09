@@ -6,7 +6,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -262,10 +261,13 @@ public class PlayerInfoActivity extends AppCompatActivity {
                     for (int i = 0; i < jsonFriends.length(); i++) {
                         JSONObject jsonFriend = jsonFriends.getJSONObject(i);
                         Friend friend = new Friend();
+                        friend.avatarPath = jsonFriend.getString("avatarfull");
                         friend.name = jsonFriend.getString("personaname");
+                        friend.games = jsonFriend.getInt("games");
+                        friend.wins = jsonFriend.getInt("win");
+                        friend.lastPlayed = jsonFriend.getInt("last_played");
                         friendsList.add(friend);
                     }
-
                 }
                 catch (JSONException e){}
 
@@ -276,7 +278,6 @@ public class PlayerInfoActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
             }
         });
     }

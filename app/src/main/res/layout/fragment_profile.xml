@@ -33,7 +33,8 @@
             android:layout_marginRight="8dp"
             android:singleLine="true"
             android:text="asdasdasdasdasdasdasdsa"
-            android:textSize="18sp"
+            android:textSize="14sp"
+            android:textStyle="bold"
             app:autoSizeTextType="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/avatar_image"
@@ -58,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:text="8000W"
                 android:textColor="#33691E"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,6 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" - "
+                android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@+id/record_wins"
                 app:layout_constraintTop_toTopOf="@+id/record_wins" />
 
@@ -75,6 +78,7 @@
                 android:layout_height="wrap_content"
                 android:text="7000L"
                 android:textColor="#B71C1C"
+                android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@+id/dash"
                 app:layout_constraintTop_toTopOf="@+id/record_wins" />
 
@@ -85,6 +89,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:text="90%"
+                android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@+id/record_loses"
                 app:layout_constraintTop_toTopOf="@+id/record_loses" />
 
