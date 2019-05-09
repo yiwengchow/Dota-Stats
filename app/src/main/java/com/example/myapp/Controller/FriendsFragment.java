@@ -31,6 +31,7 @@ import java.util.ArrayList;
 public class FriendsFragment extends Fragment {
     Player player;
     RecyclerView friendsView;
+    ArrayList<Friend> friendsList;
 
     public FriendsFragment() {
         // Required empty public constructor
@@ -41,8 +42,13 @@ public class FriendsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
-        player = (Player) getArguments().getSerializable("Player");
-        ArrayList<Friend> friendsList = (ArrayList<Friend>) getArguments().getSerializable("Friends");
+
+        if (player == null && friendsList == null){
+            player = (Player) getArguments().getSerializable("Player");
+            friendsList = (ArrayList<Friend>) getArguments().getSerializable("Friends");
+            getArguments().remove("Player");
+            getArguments().remove("Friends");
+        }
 
         friendsView = view.findViewById(R.id.friends_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());

@@ -1,5 +1,6 @@
 package com.example.myapp.Controller;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -29,6 +30,7 @@ public class FriendsView extends RecyclerView.Adapter<FriendsView.FriendsViewHol
     }
 
     public static class FriendsViewHolder extends RecyclerView.ViewHolder {
+        public View mainView;
         public ImageView avatar;
         public TextView nameText;
         public TextView gamesText;
@@ -37,6 +39,7 @@ public class FriendsView extends RecyclerView.Adapter<FriendsView.FriendsViewHol
 
         public FriendsViewHolder(View view) {
             super(view);
+            mainView = view;
             avatar = view.findViewById(R.id.friend_avatar);
             nameText = view.findViewById(R.id.friend_name);
             gamesText = view.findViewById(R.id.friend_games);
@@ -54,7 +57,7 @@ public class FriendsView extends RecyclerView.Adapter<FriendsView.FriendsViewHol
 
     @Override
     public void onBindViewHolder(@NonNull final FriendsViewHolder friendsViewHolder, final int i) {
-        Friend friend = dataset.get(i);
+        final Friend friend = dataset.get(i);
         friendsViewHolder.nameText.setText(friend.name);
         friendsViewHolder.gamesText.setText(String.valueOf(friend.games));
 
@@ -67,7 +70,6 @@ public class FriendsView extends RecyclerView.Adapter<FriendsView.FriendsViewHol
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 final Friend friend = dataset.get(i);
                 try {
                     InputStream in = new URL(friend.avatarPath).openStream();
@@ -81,6 +83,22 @@ public class FriendsView extends RecyclerView.Adapter<FriendsView.FriendsViewHol
                 } catch (MalformedURLException e) {
                 } catch (IOException e) {
                 }
+
+                PlayerInfoActivity.instance.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        friendsViewHolder.mainView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(PlayerInfoActivity.instance, PlayerInfoActivity.class);
+                                intent.putExtra("PlayerInfo", friend);
+                                PlayerInfoActivity.instance.startActivity(intent);
+                                PlayerInfoActivity.instance.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                                PlayerInfoActivity.instance.finish();
+                            }
+                        });
+                    }
+                });
             }
         }).start();
     }

@@ -23,6 +23,8 @@ import java.util.ArrayList;
 
 public class PlayerInfoActivity extends AppCompatActivity {
 
+    public static PlayerInfoActivity instance;
+
     ConstraintLayout loadingLayout;
 
     Player player;
@@ -30,6 +32,7 @@ public class PlayerInfoActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ArrayList<Friend> friendsList;
     ArrayList<Match> matchList;
+
 
     final Object loadProfileLock = new Object();
     final Object loadMatchesLock = new Object();
@@ -40,9 +43,12 @@ public class PlayerInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_info);
 
+        instance = this;
         loadingLayout = findViewById(R.id.loading_player_layout);
 
         player = (Player) getIntent().getSerializableExtra("PlayerInfo");
+        getIntent().removeExtra("myData");
+
         viewPager = findViewById(R.id.main_view_pager);
         tabLayout = findViewById(R.id.main_tab_layout);
 
@@ -261,6 +267,7 @@ public class PlayerInfoActivity extends AppCompatActivity {
                     for (int i = 0; i < jsonFriends.length(); i++) {
                         JSONObject jsonFriend = jsonFriends.getJSONObject(i);
                         Friend friend = new Friend();
+                        friend.account_id = jsonFriend.getInt("account_id");
                         friend.avatarPath = jsonFriend.getString("avatarfull");
                         friend.name = jsonFriend.getString("personaname");
                         friend.games = jsonFriend.getInt("games");

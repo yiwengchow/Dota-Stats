@@ -64,15 +64,6 @@ public class PlayerSearchView extends RecyclerView.Adapter<PlayerSearchView.Play
     @Override
     public void onBindViewHolder(@NonNull final PlayerSearchViewHolder playerSearchViewHolder, final int i) {
         final Player player = dataset.get(i);
-        playerSearchViewHolder.mainView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SearchActivity.instance, PlayerInfoActivity.class);
-                intent.putExtra("PlayerInfo", player);
-                SearchActivity.instance.startActivity(intent);
-                SearchActivity.instance.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-            }
-        });
         playerSearchViewHolder.nameView.setText(player.name);
 
         String displayDate = "Unknown";
@@ -127,6 +118,21 @@ public class PlayerSearchView extends RecyclerView.Adapter<PlayerSearchView.Play
                         @Override
                         public void run() {
                             playerSearchViewHolder.imageView.setImageBitmap(player.getBitmap());
+                        }
+                    });
+
+                    SearchActivity.instance.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            playerSearchViewHolder.mainView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(SearchActivity.instance, PlayerInfoActivity.class);
+                                    intent.putExtra("PlayerInfo", player);
+                                    SearchActivity.instance.startActivity(intent);
+                                    SearchActivity.instance.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                                }
+                            });
                         }
                     });
                 } catch (MalformedURLException e) {

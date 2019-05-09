@@ -50,7 +50,11 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        player = (Player) getArguments().getSerializable("Player");
+        if (player == null){
+            player = (Player) getArguments().getSerializable("Player");
+            getArguments().remove("Player");
+        }
+
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 

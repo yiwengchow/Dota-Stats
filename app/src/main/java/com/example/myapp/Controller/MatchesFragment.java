@@ -41,7 +41,10 @@ public class MatchesFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        matchList = (ArrayList<Match>) getArguments().getSerializable("Matches");
+        if (matchList == null){
+            matchList = (ArrayList<Match>) getArguments().getSerializable("Matches");
+            getArguments().remove("Matches");
+        }
 
         matchView = view.findViewById(R.id.matches_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
