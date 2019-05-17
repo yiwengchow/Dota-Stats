@@ -94,7 +94,6 @@ public class FriendsView extends RecyclerView.Adapter<FriendsView.FriendsViewHol
                                 intent.putExtra("PlayerInfo", friend);
                                 PlayerInfoActivity.instance.startActivity(intent);
                                 PlayerInfoActivity.instance.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-                                PlayerInfoActivity.instance.finish();
                             }
                         });
                     }

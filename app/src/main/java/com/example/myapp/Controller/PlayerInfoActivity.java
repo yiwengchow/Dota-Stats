@@ -90,8 +90,9 @@ public class PlayerInfoActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart(){
-        super.onStart();
+    protected void onResume(){
+        super.onResume();
+        instance = this;
     }
 
     @Override
