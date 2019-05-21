@@ -31,7 +31,7 @@ public class MatchSearchView extends RecyclerView.Adapter<MatchSearchView.MatchS
 
     public static class MatchSearchViewHolder extends RecyclerView.ViewHolder {
         public ImageView heroImage;
-        //public TextView heroNameText;
+        public TextView heroNameText;
         public TextView kdaText;
         public TextView startTimeText;
         public TextView lobbyTypeText;
@@ -43,7 +43,7 @@ public class MatchSearchView extends RecyclerView.Adapter<MatchSearchView.MatchS
         public MatchSearchViewHolder(View view) {
             super(view);
             heroImage = view.findViewById(R.id.hero_image);
-            //heroNameText = view.findViewById(R.id.hero_name);
+            heroNameText = view.findViewById(R.id.hero_name_text);
             kdaText = view.findViewById(R.id.kda_text);
             startTimeText = view.findViewById(R.id.starttime_text);
             lobbyTypeText = view.findViewById(R.id.lobbytype_text);
@@ -67,8 +67,7 @@ public class MatchSearchView extends RecyclerView.Adapter<MatchSearchView.MatchS
         for(Hero hero : Repository.getInstance().heroList){
             if (hero.id == match.heroId){
                 matchSearchViewHolder.heroImage.setImageResource(getHeroImageRes(hero));
-                //matchSearchViewHolder.heroNameText.setText(hero.displayName);
-//                matchSearchViewHolder.kdaText.setText();
+                matchSearchViewHolder.heroNameText.setText(hero.displayName);
                 break;
             }
         }
@@ -78,7 +77,7 @@ public class MatchSearchView extends RecyclerView.Adapter<MatchSearchView.MatchS
         matchSearchViewHolder.resultText.setTextColor(match.gameWon ? Color.GREEN : Color.RED);
 
         long currentTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-        long gameTime = match.startTime;
+        long gameTime = match.startTime + match.duration;
         long timeDiff = currentTime - gameTime;
 
         // less than a hour, display as minutes

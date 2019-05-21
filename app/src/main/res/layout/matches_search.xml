@@ -18,13 +18,11 @@
 
         <ImageView
             android:id="@+id/hero_image"
-            android:layout_width="48dp"
-            android:layout_height="27dp"
+            android:layout_width="80dp"
+            android:layout_height="45dp"
             android:layout_marginStart="4dp"
             android:layout_marginLeft="4dp"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />
@@ -32,9 +30,9 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/layout1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/hero_image"
@@ -43,32 +41,31 @@
             app:layout_constraintTop_toTopOf="@+id/hero_image">
 
             <TextView
-                android:id="@+id/skill_text"
-                android:layout_width="80dp"
+                android:id="@+id/hero_name_text"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Very High Skill"
-                android:textSize="11sp"
+                android:text="TextView"
+                android:textSize="14sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/kda_text"
+                android:id="@+id/skill_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0/0/0"
-                android:textSize="11sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/skill_text" />
+                android:text="Very High Skill"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/hero_name_text"
+                app:layout_constraintTop_toBottomOf="@+id/hero_name_text" />
 
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/layout2"
-            android:layout_width="75dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/layout3"
+            app:layout_constraintEnd_toEndOf="@+id/layout5"
             app:layout_constraintTop_toTopOf="@+id/layout1">
 
             <TextView
@@ -76,8 +73,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Won Game"
-                android:textSize="11sp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -85,19 +82,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3 hours ago"
-                android:textSize="11sp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/result_text" />
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/layout3"
-            android:layout_width="75dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            app:layout_constraintEnd_toStartOf="@id/layout4"
-            app:layout_constraintTop_toTopOf="@+id/layout2">
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout1">
 
             <TextView
                 android:id="@+id/lobbytype_text"
@@ -105,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="Lobby Type"
-                android:textSize="11sp"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -115,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="Captains Mode"
-                android:textSize="11sp"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lobbytype_text" />
 
@@ -123,26 +121,61 @@
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/layout4"
-            android:layout_width="0dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginBottom="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toEndOf="@+id/layout3"
+            app:layout_constraintTop_toBottomOf="@+id/layout1">
 
             <TextView
                 android:id="@+id/duration_text"
-                android:layout_width="40dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:text="1:33:10"
-                android:textSize="11sp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/duration_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DURATION"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/duration_text" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/layout5"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/layout4"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/kda_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0/0/0"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="KDA"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/kda_text" />
         </android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>

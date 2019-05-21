@@ -1,6 +1,5 @@
 package com.example.myapp.Controller;
 
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -106,7 +106,7 @@ public class PlayerSearchView extends RecyclerView.Adapter<PlayerSearchView.Play
             catch (ParseException e){}
         }
 
-        playerSearchViewHolder.lastMatchView.setText("Last match: " + displayDate);
+        playerSearchViewHolder.lastMatchView.setText("Last seen: " + displayDate);
         playerSearchViewHolder.imageView.setImageResource(R.drawable.default_search_avatar);
         new Thread(new Runnable() {
             @Override
