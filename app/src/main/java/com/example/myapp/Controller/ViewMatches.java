@@ -1,6 +1,7 @@
 package com.example.myapp.Controller;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ public class ViewMatches extends RecyclerView.Adapter<ViewMatches.MatchSearchVie
     }
 
     public static class MatchSearchViewHolder extends RecyclerView.ViewHolder {
+        public ConstraintLayout matchLayout;
         public ImageView heroImage;
         public TextView heroNameText;
         public TextView kdaText;
@@ -38,6 +40,7 @@ public class ViewMatches extends RecyclerView.Adapter<ViewMatches.MatchSearchVie
 
         public MatchSearchViewHolder(View view) {
             super(view);
+            matchLayout = view.findViewById(R.id.match_layout);
             heroImage = view.findViewById(R.id.hero_image);
             heroNameText = view.findViewById(R.id.hero_name_text);
             kdaText = view.findViewById(R.id.kda_text);
@@ -60,6 +63,12 @@ public class ViewMatches extends RecyclerView.Adapter<ViewMatches.MatchSearchVie
     @Override
     public void onBindViewHolder(@NonNull ViewMatches.MatchSearchViewHolder matchSearchViewHolder, int i) {
         Match match = dataset.get(i);
+
+        if (i % 2 == 0)
+            matchSearchViewHolder.matchLayout.setBackgroundResource(R.color.matchColor);
+        else
+            matchSearchViewHolder.matchLayout.setBackgroundResource(R.color.matchColor2);
+
         for(Hero hero : Repository.getInstance().heroList){
             if (hero.id == match.heroId){
                 matchSearchViewHolder.heroImage.setImageResource(getHeroImageRes(hero));
