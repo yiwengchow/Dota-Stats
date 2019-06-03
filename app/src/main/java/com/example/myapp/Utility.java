@@ -1,8 +1,6 @@
 package com.example.myapp;
 
-import android.app.Activity;
-
-import com.example.myapp.Controller.SearchActivity;
+import com.example.myapp.Controller.ActivityMain;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +25,7 @@ public class Utility {
     public String readJsonFile(String fileName){
         String json = null;
         try {
-            InputStream is = SearchActivity.instance.getAssets().open(fileName);
+            InputStream is = ActivityMain.instance.getAssets().open(fileName);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);

@@ -1,14 +1,18 @@
 package com.example.myapp.Controller;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -31,8 +35,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class SearchActivity extends AppCompatActivity {
-
+public class FragmentSearch extends Fragment {
     volatile Boolean isSearching = false;
 
     TextInputEditText searchEditText;
@@ -40,17 +43,16 @@ public class SearchActivity extends AppCompatActivity {
     RecyclerView searchView;
     ProgressBar searchProgress;
 
-    public static SearchActivity instance;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_search, container, false);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        instance = this;
-        /*MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");*/
-
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         initializeRepo();
-        initializeInterface();
+        initializeInterface(view);
         initializeSearch();
     }
 
@@ -80,13 +82,13 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeInterface() {
-        searchEditText = findViewById(R.id.SearchEditText);
-        searchButton = findViewById(R.id.SearchButton);
-        searchView = findViewById(R.id.SearchView);
-        searchProgress = findViewById(R.id.SearchProgress);
+    private void initializeInterface(View view) {
+        searchEditText = view.findViewById(R.id.SearchEditText);
+        searchButton = view.findViewById(R.id.SearchButton);
+        searchView = view.findViewById(R.id.SearchView);
+        searchProgress = view.findViewById(R.id.SearchProgress);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ActivityMain.instance);
         searchView.setLayoutManager(layoutManager);
     }
 
@@ -142,13 +144,13 @@ public class SearchActivity extends AppCompatActivity {
                                     InputStream in = new URL(player.avatarPath).openStream();
                                     player.setBitmap(BitmapFactory.decodeStream(in));
 
-                                    runOnUiThread(new Runnable() {
+                                    ActivityMain.instance.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Intent intent = new Intent(SearchActivity.instance, PlayerInfoActivity.class);
+                                            Intent intent = new Intent(ActivityMain.instance, ActivityPlayer.class);
                                             intent.putExtra("PlayerInfo", player);
-                                            SearchActivity.instance.startActivity(intent);
-                                            SearchActivity.instance.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                                            ActivityMain.instance.startActivity(intent);
+                                            ActivityMain.instance.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 
                                             setSearchProgress(false);
                                         }
@@ -199,10 +201,10 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 } catch (JSONException e) {}
 
-                if (searchView.getAdapter() == null) searchView.setAdapter(new PlayerSearchView(playerList));
-                else ((PlayerSearchView) searchView.getAdapter()).updateList(playerList);
+                if (searchView.getAdapter() == null) searchView.setAdapter(new ViewPlayers(playerList));
+                else ((ViewPlayers) searchView.getAdapter()).updateList(playerList);
 
-                searchView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.layout_fall_down));
+                searchView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(ActivityMain.instance, R.anim.layout_fall_down));
                 searchView.smoothScrollToPosition(0);
 
                 setSearchProgress(false);

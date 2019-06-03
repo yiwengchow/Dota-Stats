@@ -10,25 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.example.myapp.Model.DotaAPI;
 import com.example.myapp.Model.Match;
-import com.example.myapp.Model.Player;
 import com.example.myapp.R;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MatchesFragment extends Fragment {
+public class FragmentMatches extends Fragment {
 
     RecyclerView matchView;
     ArrayList<Match> matchList;
 
-    public MatchesFragment() {
+    public FragmentMatches() {
         // Required empty public constructor
     }
 
@@ -49,6 +41,6 @@ public class MatchesFragment extends Fragment {
         matchView = view.findViewById(R.id.matches_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         matchView.setLayoutManager(layoutManager);
-        matchView.setAdapter(new MatchSearchView(matchList));
+        matchView.setAdapter(new ViewMatches(matchList));
     }
 }

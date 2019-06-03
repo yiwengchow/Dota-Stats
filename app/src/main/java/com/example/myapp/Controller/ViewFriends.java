@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myapp.Model.Friend;
-import com.example.myapp.Model.Player;
 import com.example.myapp.R;
 import com.example.myapp.Utility;
 
@@ -22,10 +21,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class FriendsView extends RecyclerView.Adapter<FriendsView.FriendsViewHolder> {
+public class ViewFriends extends RecyclerView.Adapter<ViewFriends.FriendsViewHolder> {
     private ArrayList<Friend> dataset;
 
-    public FriendsView(ArrayList<Friend> dataset) {
+    public ViewFriends(ArrayList<Friend> dataset) {
         this.dataset = dataset;
     }
 
@@ -51,7 +50,7 @@ public class FriendsView extends RecyclerView.Adapter<FriendsView.FriendsViewHol
     @NonNull
     @Override
     public FriendsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.friends, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.view_friends, viewGroup, false);
         return new FriendsViewHolder(v);
     }
 
@@ -74,7 +73,7 @@ public class FriendsView extends RecyclerView.Adapter<FriendsView.FriendsViewHol
                 try {
                     InputStream in = new URL(friend.avatarPath).openStream();
                     friend.setBitmap(BitmapFactory.decodeStream(in));
-                    SearchActivity.instance.runOnUiThread(new Runnable() {
+                    ActivityMain.instance.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             friendsViewHolder.avatar.setImageBitmap(friend.getBitmap());
@@ -84,16 +83,16 @@ public class FriendsView extends RecyclerView.Adapter<FriendsView.FriendsViewHol
                 } catch (IOException e) {
                 }
 
-                PlayerInfoActivity.instance.runOnUiThread(new Runnable() {
+                ActivityPlayer.instance.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         friendsViewHolder.mainView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(PlayerInfoActivity.instance, PlayerInfoActivity.class);
+                                Intent intent = new Intent(ActivityPlayer.instance, ActivityPlayer.class);
                                 intent.putExtra("PlayerInfo", friend);
-                                PlayerInfoActivity.instance.startActivity(intent);
-                                PlayerInfoActivity.instance.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                                ActivityPlayer.instance.startActivity(intent);
+                                ActivityPlayer.instance.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                             }
                         });
                     }

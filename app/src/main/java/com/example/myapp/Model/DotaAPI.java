@@ -4,7 +4,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.myapp.Controller.SearchActivity;
+import com.example.myapp.Controller.ActivityMain;
 
 public class DotaAPI {
     private static DotaAPI instance;
@@ -16,7 +16,7 @@ public class DotaAPI {
     private RequestQueue requestQueue;
 
     public DotaAPI(){
-        requestQueue = Volley.newRequestQueue(SearchActivity.instance);
+        requestQueue = Volley.newRequestQueue(ActivityMain.instance);
     }
 
     public void getPlayerAsync(int id, Response.Listener<String> onSuccess, Response.ErrorListener onFailure){

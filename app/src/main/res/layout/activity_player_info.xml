@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Controller.PlayerInfoActivity">
+    tools:context=".Controller.ActivityPlayer">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/loading_player_layout"
@@ -17,7 +17,7 @@
         android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_view_pager">
+        app:layout_constraintTop_toTopOf="@+id/player_view_pager">
 
         <TextView
             android:id="@+id/loading_player_text"
@@ -51,7 +51,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/main_view_pager"
+        android:id="@+id/player_view_pager"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/main_tab_layout"
+            android:id="@+id/player_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </android.support.v4.view.ViewPager>

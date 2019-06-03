@@ -20,7 +20,7 @@ import com.example.myapp.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ProfileFragment extends Fragment {
+public class FragmentProfile extends Fragment {
     Player player;
 
     ConstraintLayout winLoseLayout;
@@ -37,7 +37,7 @@ public class ProfileFragment extends Fragment {
     TextView partyMMR;
     TextView estimatedMMR;
 
-    public ProfileFragment() {
+    public FragmentProfile() {
         // Required empty public constructor
     }
 

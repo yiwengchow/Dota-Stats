@@ -21,9 +21,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class PlayerInfoActivity extends AppCompatActivity {
+public class ActivityPlayer extends AppCompatActivity {
 
-    public static PlayerInfoActivity instance;
+    public static ActivityPlayer instance;
 
     ConstraintLayout loadingLayout;
 
@@ -49,8 +49,8 @@ public class PlayerInfoActivity extends AppCompatActivity {
         player = (Player) getIntent().getSerializableExtra("PlayerInfo");
         getIntent().removeExtra("myData");
 
-        viewPager = findViewById(R.id.main_view_pager);
-        tabLayout = findViewById(R.id.main_tab_layout);
+        viewPager = findViewById(R.id.player_view_pager);
+        tabLayout = findViewById(R.id.player_tab_layout);
 
         new Thread(new Runnable() {
             @Override
@@ -105,25 +105,25 @@ public class PlayerInfoActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         // Create profile fragment
-        ProfileFragment profileFragment = new ProfileFragment();
+        FragmentProfile fragmentProfile = new FragmentProfile();
         Bundle profileBundle = new Bundle();
         profileBundle.putSerializable("Player", player);
-        profileFragment.setArguments(profileBundle);
-        adapter.addFragment(profileFragment, "Profile");
+        fragmentProfile.setArguments(profileBundle);
+        adapter.addFragment(fragmentProfile, "Profile");
 
         // Create matches fragment
-        MatchesFragment matchesFragment = new MatchesFragment();
+        FragmentMatches fragmentMatches = new FragmentMatches();
         Bundle matchBundle = new Bundle();
         matchBundle.putSerializable("Matches", matchList);
-        matchesFragment.setArguments(matchBundle);
-        adapter.addFragment(matchesFragment, "Matches");
+        fragmentMatches.setArguments(matchBundle);
+        adapter.addFragment(fragmentMatches, "Matches");
 
-        FriendsFragment friendsFragment = new FriendsFragment();
+        FragmentFriends fragmentFriends = new FragmentFriends();
         Bundle friendsBundle = new Bundle();
         friendsBundle.putSerializable("Player", player);
         friendsBundle.putSerializable("Friends", friendsList);
-        friendsFragment.setArguments(friendsBundle);
-        adapter.addFragment(friendsFragment, "Friends");
+        fragmentFriends.setArguments(friendsBundle);
+        adapter.addFragment(fragmentFriends, "Friends");
 
         return adapter;
     }

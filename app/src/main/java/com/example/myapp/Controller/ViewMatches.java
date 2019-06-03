@@ -14,18 +14,14 @@ import com.example.myapp.R;
 import com.example.myapp.Repository;
 import com.example.myapp.Utility;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class MatchSearchView extends RecyclerView.Adapter<MatchSearchView.MatchSearchViewHolder> {
+public class ViewMatches extends RecyclerView.Adapter<ViewMatches.MatchSearchViewHolder> {
 
     private ArrayList<Match> dataset;
 
-    public MatchSearchView(ArrayList<Match> dataset) {
+    public ViewMatches(ArrayList<Match> dataset) {
         this.dataset = dataset;
     }
 
@@ -56,13 +52,13 @@ public class MatchSearchView extends RecyclerView.Adapter<MatchSearchView.MatchS
 
     @NonNull
     @Override
-    public MatchSearchView.MatchSearchViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.matches_search, viewGroup, false);
-        return new MatchSearchView.MatchSearchViewHolder(v);
+    public ViewMatches.MatchSearchViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.view_matches, viewGroup, false);
+        return new ViewMatches.MatchSearchViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MatchSearchView.MatchSearchViewHolder matchSearchViewHolder, int i) {
+    public void onBindViewHolder(@NonNull ViewMatches.MatchSearchViewHolder matchSearchViewHolder, int i) {
         Match match = dataset.get(i);
         for(Hero hero : Repository.getInstance().heroList){
             if (hero.id == match.heroId){
@@ -123,8 +119,8 @@ public class MatchSearchView extends RecyclerView.Adapter<MatchSearchView.MatchS
     }
 
     private int getHeroImageRes(Hero hero){
-        String packageName = SearchActivity.instance.getPackageName();
-        return SearchActivity.instance.getResources().getIdentifier("drawable/" + hero.name.split("npc_dota_hero_")[1], null, packageName);
+        String packageName = ActivityMain.instance.getPackageName();
+        return ActivityMain.instance.getResources().getIdentifier("drawable/" + hero.name.split("npc_dota_hero_")[1], null, packageName);
     }
 
 }

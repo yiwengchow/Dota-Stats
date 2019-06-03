@@ -25,7 +25,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-public class PlayerSearchView extends RecyclerView.Adapter<PlayerSearchView.PlayerSearchViewHolder> {
+public class ViewPlayers extends RecyclerView.Adapter<ViewPlayers.PlayerSearchViewHolder> {
 
     private ArrayList<Player> dataset;
 
@@ -44,7 +44,7 @@ public class PlayerSearchView extends RecyclerView.Adapter<PlayerSearchView.Play
         }
     }
 
-    public PlayerSearchView(ArrayList<Player> dataset) {
+    public ViewPlayers(ArrayList<Player> dataset) {
         this.dataset = dataset;
     }
 
@@ -57,7 +57,7 @@ public class PlayerSearchView extends RecyclerView.Adapter<PlayerSearchView.Play
     @NonNull
     @Override
     public PlayerSearchViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.player_search, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.view_players, viewGroup, false);
         return new PlayerSearchViewHolder(v);
     }
 
@@ -114,23 +114,23 @@ public class PlayerSearchView extends RecyclerView.Adapter<PlayerSearchView.Play
                 try {
                     InputStream in = new URL(player.avatarPath).openStream();
                     player.setBitmap(BitmapFactory.decodeStream(in));
-                    SearchActivity.instance.runOnUiThread(new Runnable() {
+                    ActivityMain.instance.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             playerSearchViewHolder.imageView.setImageBitmap(player.getBitmap());
                         }
                     });
 
-                    SearchActivity.instance.runOnUiThread(new Runnable() {
+                    ActivityMain.instance.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             playerSearchViewHolder.mainView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent intent = new Intent(SearchActivity.instance, PlayerInfoActivity.class);
+                                    Intent intent = new Intent(ActivityMain.instance, ActivityPlayer.class);
                                     intent.putExtra("PlayerInfo", player);
-                                    SearchActivity.instance.startActivity(intent);
-                                    SearchActivity.instance.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                                    ActivityMain.instance.startActivity(intent);
+                                    ActivityMain.instance.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                                 }
                             });
                         }
