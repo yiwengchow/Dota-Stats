@@ -22,6 +22,7 @@ import com.example.myapp.Model.Hero;
 import com.example.myapp.Model.Player;
 import com.example.myapp.R;
 import com.example.myapp.Repository;
+import com.example.myapp.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +37,9 @@ import java.util.ArrayList;
 public class ActivityMain extends AppCompatActivity {
 
     public static ActivityMain instance;
+    public FragmentFavourites fragmentFavourites;
+    public FragmentSearch fragmentSearch;
+
     ViewPager viewPager;
     TabLayout tabLayout;
 
@@ -44,6 +48,7 @@ public class ActivityMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         instance = this;
+        Utility.getInstance().updateFavouritesList(this);
 
         viewPager = findViewById(R.id.main_view_pager);
         tabLayout = findViewById(R.id.main_tab_layout);
@@ -56,15 +61,16 @@ public class ActivityMain extends AppCompatActivity {
                 tabLayout.setupWithViewPager(viewPager);
             }
         });
+
     }
 
     private ViewPagerAdapter setupPage() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        FragmentSearch fragmentSearch = new FragmentSearch();
+        fragmentSearch = new FragmentSearch();
         adapter.addFragment(fragmentSearch, "Search");
 
-        FragmentFavourites fragmentFavourites = new FragmentFavourites();
+        fragmentFavourites = new FragmentFavourites();
         adapter.addFragment(fragmentFavourites, "Favourites");
 
         return adapter;

@@ -1,7 +1,6 @@
 package com.example.myapp.Model;
 
 import android.graphics.Bitmap;
-
 import java.io.Serializable;
 
 public class Player implements Serializable{
@@ -16,6 +15,7 @@ public class Player implements Serializable{
     public int estimateMMR;
     public int rank;
     public int leaderboard;
+    public Boolean isFavourited = false;
 
     private int [] pixels;
     private int width , height;

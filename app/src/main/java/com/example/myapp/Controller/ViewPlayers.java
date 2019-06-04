@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.example.myapp.Model.Player;
 import com.example.myapp.R;
+import com.example.myapp.Repository;
+import com.example.myapp.Utility;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +36,7 @@ public class ViewPlayers extends RecyclerView.Adapter<ViewPlayers.PlayerSearchVi
         public ImageView imageView;
         public TextView nameView;
         public TextView lastMatchView;
+        public ImageView favouriteImage;
 
         public PlayerSearchViewHolder(View view) {
             super(view);
@@ -41,6 +44,7 @@ public class ViewPlayers extends RecyclerView.Adapter<ViewPlayers.PlayerSearchVi
             nameView = view.findViewById(R.id.player_search_name_text);
             imageView = view.findViewById(R.id.player_search_image);
             lastMatchView = view.findViewById(R.id.player_search_last_played_text);
+            favouriteImage = view.findViewById(R.id.player_favourite_image);
         }
     }
 
@@ -106,8 +110,43 @@ public class ViewPlayers extends RecyclerView.Adapter<ViewPlayers.PlayerSearchVi
             catch (ParseException e){}
         }
 
+        playerSearchViewHolder.favouriteImage.setImageResource(R.drawable.star_false);
+        for (Player p : Repository.getInstance().favouritesList){
+            if (p.account_id == player.account_id){
+                player.isFavourited = true;
+                playerSearchViewHolder.favouriteImage.setImageResource(R.drawable.star_true);
+                break;
+            }
+        }
+
+        playerSearchViewHolder.favouriteImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ViewPlayers searchView = (ViewPlayers) ActivityMain.instance.fragmentSearch.searchView.getAdapter();
+                ViewPlayers favouriteView = (ViewPlayers) ActivityMain.instance.fragmentFavourites.favouritesView.getAdapter();
+
+                if (!player.isFavourited) {
+                    player.isFavourited = true;
+
+                    if (favouriteView != null) favouriteView.notifyDataSetChanged();
+                    if (searchView != null) searchView.updatePlayer(player);
+
+                    Utility.getInstance().addToFavourites(ActivityMain.instance, player);
+                }
+                else {
+                    player.isFavourited = false;
+
+                    if (favouriteView != null) favouriteView.removePlayer(player);
+                    if (searchView != null) searchView.updatePlayer(player);
+
+                    Utility.getInstance().deleteFavourite(ActivityMain.instance,player);
+                }
+
+                playerSearchViewHolder.favouriteImage.setImageResource(player.isFavourited ? R.drawable.star_true : R.drawable.star_false);
+            }
+        });
+
         playerSearchViewHolder.lastMatchView.setText("Last seen: " + displayDate);
-        playerSearchViewHolder.imageView.setImageResource(R.drawable.default_search_avatar);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -145,5 +184,24 @@ public class ViewPlayers extends RecyclerView.Adapter<ViewPlayers.PlayerSearchVi
     @Override
     public int getItemCount() {
         return dataset.size();
+    }
+
+    public void updatePlayer(Player player){
+        for (int i = 0; i < dataset.size(); i++){
+            if (dataset.get(i).account_id == player.account_id){
+                notifyItemChanged(i);
+                break;
+            }
+        }
+    }
+
+
+    public void removePlayer(Player player){
+        for (int i = 0; i < dataset.size(); i++){
+            if (dataset.get(i).account_id == player.account_id){
+                notifyItemRemoved(i);
+                break;
+            }
+        }
     }
 }

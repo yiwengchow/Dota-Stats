@@ -1,6 +1,5 @@
 package com.example.myapp.Controller;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -9,6 +8,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,11 +36,11 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class FragmentSearch extends Fragment {
+    public RecyclerView searchView;
     volatile Boolean isSearching = false;
 
     TextInputEditText searchEditText;
     Button searchButton;
-    RecyclerView searchView;
     ProgressBar searchProgress;
 
     @Override
@@ -84,12 +84,13 @@ public class FragmentSearch extends Fragment {
 
     private void initializeInterface(View view) {
         searchEditText = view.findViewById(R.id.SearchEditText);
-        searchButton = view.findViewById(R.id.SearchButton);
-        searchView = view.findViewById(R.id.SearchView);
-        searchProgress = view.findViewById(R.id.SearchProgress);
+        searchButton = view.findViewById(R.id.search_button);
+        searchView = view.findViewById(R.id.search_view);
+        searchProgress = view.findViewById(R.id.search_progress);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ActivityMain.instance);
         searchView.setLayoutManager(layoutManager);
+        searchView.setItemAnimator(null);
     }
 
     private void initializeSearch() {

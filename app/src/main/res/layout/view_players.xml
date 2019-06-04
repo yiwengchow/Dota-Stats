@@ -18,26 +18,44 @@
 
     <TextView
         android:id="@+id/player_search_name_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_weight="1"
         android:text="TextView"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/player_favourite_image"
         app:layout_constraintStart_toEndOf="@+id/player_search_image"
         app:layout_constraintTop_toTopOf="@+id/player_search_image" />
 
     <TextView
         android:id="@+id/player_search_last_played_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:text="TextView"
+        app:layout_constraintEnd_toStartOf="@+id/player_favourite_image"
         app:layout_constraintStart_toEndOf="@+id/player_search_image"
         app:layout_constraintTop_toBottomOf="@+id/player_search_name_text" />
+
+    <ImageView
+        android:id="@+id/player_favourite_image"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:foreground="@drawable/star_false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/player_search_image"
+        tools:srcCompat="@drawable/star_false" />
 
     <View
         android:id="@+id/divider"
