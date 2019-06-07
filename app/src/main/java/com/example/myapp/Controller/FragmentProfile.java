@@ -1,5 +1,6 @@
 package com.example.myapp.Controller;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -16,6 +17,8 @@ import com.android.volley.VolleyError;
 import com.example.myapp.Model.DotaAPI;
 import com.example.myapp.Model.Player;
 import com.example.myapp.R;
+import com.example.myapp.Repository;
+import com.example.myapp.Utility;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +39,7 @@ public class FragmentProfile extends Fragment {
     TextView soloMMR;
     TextView partyMMR;
     TextView estimatedMMR;
+    ImageView favouriteImage;
 
     public FragmentProfile() {
         // Required empty public constructor
@@ -72,6 +76,26 @@ public class FragmentProfile extends Fragment {
         soloMMR = view.findViewById(R.id.solo_mmr);
         partyMMR = view.findViewById(R.id.party_mmr);
         estimatedMMR = view.findViewById(R.id.estimate_mmr);
+        favouriteImage = view.findViewById(R.id.player_info_favourite_image);
+
+        for (Player p : Repository.getInstance().favouritesList){
+            if (p.account_id == player.account_id){
+                player.isFavourited = true;
+                break;
+            }
+        }
+        favouriteImage.setImageResource(player.isFavourited ? R.drawable.star_true : R.drawable.star_false);
+        favouriteImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (player.isFavourited)
+                    Utility.getInstance().deleteFavourite(ActivityPlayer.instance, player);
+                else
+                    Utility.getInstance().addToFavourites(ActivityPlayer.instance, player);
+
+                favouriteImage.setImageResource(player.isFavourited ? R.drawable.star_true : R.drawable.star_false);
+            }
+        });
 
         loadData();
     }

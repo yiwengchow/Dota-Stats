@@ -56,6 +56,14 @@ public class FragmentSearch extends Fragment {
         initializeSearch();
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        if (searchView.getAdapter() != null)
+            searchView.getAdapter().notifyDataSetChanged();
+    }
+
     private void initializeRepo(){
         DotaAPI.getInstance().getHeroes(new Response.Listener<String>() {
             @Override

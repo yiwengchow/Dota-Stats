@@ -126,16 +126,12 @@ public class ViewPlayers extends RecyclerView.Adapter<ViewPlayers.PlayerSearchVi
                 ViewPlayers favouriteView = (ViewPlayers) ActivityMain.instance.fragmentFavourites.favouritesView.getAdapter();
 
                 if (!player.isFavourited) {
-                    player.isFavourited = true;
-
                     if (favouriteView != null) favouriteView.notifyDataSetChanged();
                     if (searchView != null) searchView.updatePlayer(player);
 
                     Utility.getInstance().addToFavourites(ActivityMain.instance, player);
                 }
                 else {
-                    player.isFavourited = false;
-
                     if (favouriteView != null) favouriteView.removePlayer(player);
                     if (searchView != null) searchView.updatePlayer(player);
 

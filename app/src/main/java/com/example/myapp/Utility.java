@@ -72,6 +72,8 @@ public class Utility {
     }
 
     public void addToFavourites(Context context, Player player){
+        player.isFavourited = true;
+
         Repository.getInstance().favouritesList.add(player);
         // Write to file
         try{
@@ -97,6 +99,8 @@ public class Utility {
     }
 
     public void deleteFavourite(Context context, Player player){
+        player.isFavourited = false;
+
         try{
             for (Player p : Repository.getInstance().favouritesList){
                 if (p.account_id == player.account_id){

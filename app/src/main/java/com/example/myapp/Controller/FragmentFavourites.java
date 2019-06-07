@@ -49,4 +49,10 @@ public class FragmentFavourites extends Fragment {
 
         favouritesView.setItemAnimator(null);
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        favouritesView.getAdapter().notifyDataSetChanged();
+    }
 }

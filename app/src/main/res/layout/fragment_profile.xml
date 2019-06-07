@@ -36,7 +36,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:autoSizeTextType="none"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/player_info_favourite_image"
             app:layout_constraintStart_toEndOf="@+id/avatar_image"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,7 +49,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/player_info_favourite_image"
             app:layout_constraintStart_toEndOf="@+id/avatar_image"
             app:layout_constraintTop_toBottomOf="@+id/player_name">
 
@@ -201,6 +201,16 @@
             </android.support.constraint.ConstraintLayout>
 
         </android.support.constraint.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/player_info_favourite_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:src="@drawable/star_false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/avatar_image" />
 
     </android.support.constraint.ConstraintLayout>
 
