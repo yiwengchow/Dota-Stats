@@ -48,4 +48,9 @@ public class DotaAPI {
         StringRequest stringReq = new StringRequest(Request.Method.GET, String.format("https://api.opendota.com/api/players/%s/peers", id), onSuccess, onFailure);
         requestQueue.add(stringReq);
     }
+
+    public void getMatch(String matchId, Response.Listener<String> onSuccess, Response.ErrorListener onFailure){
+        StringRequest stringReq = new StringRequest(Request.Method.GET, " https://api.opendota.com/api/matches/" + matchId, onSuccess, onFailure);
+        requestQueue.add(stringReq);
+    }
 }

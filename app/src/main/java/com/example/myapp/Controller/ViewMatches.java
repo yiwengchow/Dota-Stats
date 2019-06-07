@@ -1,5 +1,7 @@
 package com.example.myapp.Controller;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -11,18 +13,20 @@ import android.widget.TextView;
 
 import com.example.myapp.Model.Hero;
 import com.example.myapp.Model.Match;
+import com.example.myapp.Model.PlayerMatch;
 import com.example.myapp.R;
 import com.example.myapp.Repository;
 import com.example.myapp.Utility;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class ViewMatches extends RecyclerView.Adapter<ViewMatches.MatchSearchViewHolder> {
 
-    private ArrayList<Match> dataset;
+    private ArrayList<PlayerMatch> dataset;
 
-    public ViewMatches(ArrayList<Match> dataset) {
+    public ViewMatches(ArrayList<PlayerMatch> dataset) {
         this.dataset = dataset;
     }
 
@@ -62,7 +66,17 @@ public class ViewMatches extends RecyclerView.Adapter<ViewMatches.MatchSearchVie
 
     @Override
     public void onBindViewHolder(@NonNull ViewMatches.MatchSearchViewHolder matchSearchViewHolder, int i) {
-        Match match = dataset.get(i);
+        final PlayerMatch playerMatch = dataset.get(i);
+
+        matchSearchViewHolder.matchLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ActivityPlayer.instance, ActivityMatch.class);
+                intent.putExtra("match",playerMatch);
+                ActivityPlayer.instance.startActivity(intent);
+                ActivityPlayer.instance.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+            }
+        });
 
         if (i % 2 == 0)
             matchSearchViewHolder.matchLayout.setBackgroundResource(R.color.matchColor);
@@ -70,19 +84,19 @@ public class ViewMatches extends RecyclerView.Adapter<ViewMatches.MatchSearchVie
             matchSearchViewHolder.matchLayout.setBackgroundResource(R.color.matchColor2);
 
         for(Hero hero : Repository.getInstance().heroList){
-            if (hero.id == match.heroId){
+            if (hero.id == playerMatch.heroId){
                 matchSearchViewHolder.heroImage.setImageResource(getHeroImageRes(hero));
                 matchSearchViewHolder.heroNameText.setText(hero.displayName);
                 break;
             }
         }
 
-        matchSearchViewHolder.kdaText.setText(String.format("%d/%d/%d", match.kills, match.deaths, match.assists));
-        matchSearchViewHolder.resultText.setText(match.gameWon ? "Game Won" : "Game Lost");
-        matchSearchViewHolder.resultText.setTextColor(match.gameWon ? Color.GREEN : Color.RED);
+        matchSearchViewHolder.kdaText.setText(String.format("%d/%d/%d", playerMatch.kills, playerMatch.deaths, playerMatch.assists));
+        matchSearchViewHolder.resultText.setText(playerMatch.gameWon ? "Game Won" : "Game Lost");
+        matchSearchViewHolder.resultText.setTextColor(playerMatch.gameWon ? Color.GREEN : Color.RED);
 
         long currentTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-        long gameTime = match.startTime + match.duration;
+        long gameTime = playerMatch.startTime + playerMatch.duration;
         long timeDiff = currentTime - gameTime;
 
         // less than a hour, display as minutes
@@ -110,15 +124,15 @@ public class ViewMatches extends RecyclerView.Adapter<ViewMatches.MatchSearchVie
             matchSearchViewHolder.startTimeText.setText(String.format("%d %s ago", years, years <= 1 ? "year" : "years"));
         }
 
-        int seconds = match.duration;
+        int seconds = playerMatch.duration;
         long hours = TimeUnit.SECONDS.toHours(seconds);
         long minute = TimeUnit.SECONDS.toMinutes(seconds) - (TimeUnit.SECONDS.toHours(seconds)* 60);
         long second = TimeUnit.SECONDS.toSeconds(seconds) - (TimeUnit.SECONDS.toMinutes(seconds) *60);
         matchSearchViewHolder.durationText.setText(String.format("%s%02d:%02d", hours != 0 ? hours + ":" : "", minute, second));
 
-        matchSearchViewHolder.skillText.setText(match.getSkillBracket());
-        matchSearchViewHolder.lobbyTypeText.setText(Utility.getInstance().getLobbyTypeById(match.lobbyType));
-        matchSearchViewHolder.gameTypeText.setText(Utility.getInstance().getGameModeById(match.gameMode));
+        matchSearchViewHolder.skillText.setText(playerMatch.getSkillBracket());
+        matchSearchViewHolder.lobbyTypeText.setText(Utility.getInstance().getLobbyTypeById(playerMatch.lobbyType));
+        matchSearchViewHolder.gameTypeText.setText(Utility.getInstance().getGameModeById(playerMatch.gameMode));
     }
 
     @Override

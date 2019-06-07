@@ -13,6 +13,7 @@ import com.example.myapp.Model.DotaAPI;
 import com.example.myapp.Model.Friend;
 import com.example.myapp.Model.Match;
 import com.example.myapp.Model.Player;
+import com.example.myapp.Model.PlayerMatch;
 import com.example.myapp.R;
 
 import org.json.JSONArray;
@@ -211,36 +212,36 @@ public class ActivityPlayer extends AppCompatActivity {
 
                     for (int i = 0; i < jsonMatchList.length(); i++){
                         JSONObject jsonMatchObj = jsonMatchList.getJSONObject(i);
-                        Match match = new Match();
-                        match.matchId = jsonMatchObj.getInt("match_id");
-                        match.playerSlot = jsonMatchObj.getInt("player_slot");
+                        PlayerMatch playerMatch = new PlayerMatch();
+                        playerMatch.matchId = jsonMatchObj.getInt("match_id");
+                        playerMatch.playerSlot = jsonMatchObj.getInt("player_slot");
 
                         boolean radiantWon = jsonMatchObj.getBoolean("radiant_win");
-                        if (match.playerSlot >= 0 && match.playerSlot <= 127) match.gameWon = radiantWon;
-                        else match.gameWon = !radiantWon;
+                        if (playerMatch.playerSlot >= 0 && playerMatch.playerSlot <= 127) playerMatch.gameWon = radiantWon;
+                        else playerMatch.gameWon = !radiantWon;
 
-                        match.duration = jsonMatchObj.getInt("duration");
-                        match.gameMode = jsonMatchObj.getInt("game_mode");
-                        match.lobbyType = jsonMatchObj.getInt("lobby_type");
-                        match.heroId = jsonMatchObj.getInt("hero_id");
-                        match.startTime = jsonMatchObj.getInt("start_time");
-                        match.kills = jsonMatchObj.getInt("kills");
-                        match.deaths = jsonMatchObj.getInt("deaths");
-                        match.assists = jsonMatchObj.getInt("assists");
+                        playerMatch.duration = jsonMatchObj.getInt("duration");
+                        playerMatch.gameMode = jsonMatchObj.getInt("game_mode");
+                        playerMatch.lobbyType = jsonMatchObj.getInt("lobby_type");
+                        playerMatch.heroId = jsonMatchObj.getInt("hero_id");
+                        playerMatch.startTime = jsonMatchObj.getInt("start_time");
+                        playerMatch.kills = jsonMatchObj.getInt("kills");
+                        playerMatch.deaths = jsonMatchObj.getInt("deaths");
+                        playerMatch.assists = jsonMatchObj.getInt("assists");
 
                         try{
-                            match.version = jsonMatchObj.getInt("version");
+                            playerMatch.version = jsonMatchObj.getInt("version");
                         }catch(JSONException e){}
 
                         try{
-                            match.setSkillBracket(jsonMatchObj.getInt("skill"));
+                            playerMatch.setSkillBracket(jsonMatchObj.getInt("skill"));
                         }catch(JSONException e){}
 
                         try{
-                            match.partySize = jsonMatchObj.getInt("party_size");
+                            playerMatch.partySize = jsonMatchObj.getInt("party_size");
                         }catch(JSONException e){}
 
-                        matchList.add(match);
+                        matchList.add(playerMatch);
                     }
 
                     synchronized (loadMatchesLock){

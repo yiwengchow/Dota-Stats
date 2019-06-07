@@ -1,6 +1,10 @@
 package com.example.myapp.Model;
 
-public class Match {
+import android.net.wifi.p2p.WifiP2pManager;
+
+import java.io.Serializable;
+
+public class Match implements Serializable {
     public int matchId;
     public int playerSlot;
     public int heroId;
@@ -10,10 +14,6 @@ public class Match {
     public int lobbyType;
     public int startTime;
     public int version;
-    public int kills;
-    public int deaths;
-    public int assists;
-    public int partySize;
 
     private int skillBracket;
     public void setSkillBracket(int value){

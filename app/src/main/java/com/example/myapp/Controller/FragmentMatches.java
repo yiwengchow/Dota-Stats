@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapp.Model.Match;
+import com.example.myapp.Model.PlayerMatch;
 import com.example.myapp.R;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 public class FragmentMatches extends Fragment {
 
     RecyclerView matchView;
-    ArrayList<Match> matchList;
+    ArrayList<PlayerMatch> matchList;
 
     public FragmentMatches() {
         // Required empty public constructor
@@ -34,7 +35,7 @@ public class FragmentMatches extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         if (matchList == null){
-            matchList = (ArrayList<Match>) getArguments().getSerializable("Matches");
+            matchList = (ArrayList<PlayerMatch>) getArguments().getSerializable("Matches");
             getArguments().remove("Matches");
         }
 
